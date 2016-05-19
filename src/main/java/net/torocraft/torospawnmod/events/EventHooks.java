@@ -6,6 +6,7 @@ import net.minecraft.block.BlockSlab.EnumBlockHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,6 +19,7 @@ public class EventHooks {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void checkSpawnConditions(LivingUpdateEvent event) {
+		System.out.println("in livingupdateevent: " + event.getEntityLiving().getName());
 		if(!(event.getEntityLiving() instanceof EntityPlayer)) {
 			return;
 		}
@@ -35,9 +37,9 @@ public class EventHooks {
 		
 		IBlockState blockState = player.getEntityWorld().getBlockState(player.getPosition());
 		if (blockMeetsSpawnConditions(blockState)) {
-			
+			player.addChatMessage(new TextComponentString("enemy can spawn here"));
 		} else {
-			
+			player.addChatMessage(new TextComponentString("enemy canNOT spawn here"));
 		}
 	}
 
