@@ -1,5 +1,7 @@
 package net.torocraft.torospawnmod;
 
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -7,6 +9,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.torocraft.torospawnmod.gui.GuiSpawnScanner;
 
 @Mod (modid = ToroSpawnMod.MODID, name = ToroSpawnMod.MODNAME, version = ToroSpawnMod.VERSION)
 public class ToroSpawnMod {
@@ -34,6 +37,7 @@ public class ToroSpawnMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 	    proxy.postInit(e);
+		MinecraftForge.EVENT_BUS.register(new GuiSpawnScanner(Minecraft.getMinecraft()));
 	}
 	
 }

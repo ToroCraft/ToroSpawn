@@ -65,38 +65,45 @@ public class ItemSpawnScanner extends ItemArmor {
 		}
 		
 		BlockPos playerPos = player.getPosition();
-		BlockPos blockPos = playerPos.add(0, -1, 0);
+		BlockPos blockPos = playerPos.down(1);
 		
 		IBlockState blockState = world.getBlockState(blockPos);
-		String reason = blockMeetsSpawnConditions(world, player, blockState, blockPos);
-		if (reason != null) {
-			player.addChatMessage(new TextComponentString("enemy cannot spawn here: " + reason));
+		if (blockMeetsSpawnConditions(world, player, blockState, blockPos)) {
+			player.addChatMessage(new TextComponentString("enemy can spawn here"));
 		} else {
 			//player.addChatMessage(new TextComponentString("enemy canNOT spawn here"));
 		}
 	}
 
-	private String blockMeetsSpawnConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos pos) {
-		Block block = blockState.getBlock();
-		int light = world.getLightFor(EnumSkyBlock.SKY, pos);
+	private boolean blockMeetsSpawnConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos blockPos) {
 		
-		System.out.println("light: " + light);
+		if (isJumping(player)) {
+			return false;
+		}
+		
+		Block block = blockState.getBlock();
+		BlockPos playerPos = player.getPosition();
+		int light = world.getChunkFromBlockCoords(playerPos).getLightFor(EnumSkyBlock.BLOCK, playerPos);
 		if (light > 7) {
-			return "light";
+			return false;
 		}
 		
 		if (block.getLightOpacity(blockState) == 0) {
-			return "not opaque";
+			return false;
 		}
 		
 		if (block instanceof BlockSlab) {
 			System.out.println("block is slab");
 			if (!block.isFullBlock(blockState) && blockState.getValue(BlockSlab.HALF) == EnumBlockHalf.BOTTOM) {
-				return "half slab";
+				return false;
 			}
 		}
 		
-		return null;
+		return true;
+	}
+
+	private boolean isJumping(EntityPlayer player) {
+		return false;
 	}
 
 	private boolean isWearingSpawnScanner(EntityPlayer player) {
