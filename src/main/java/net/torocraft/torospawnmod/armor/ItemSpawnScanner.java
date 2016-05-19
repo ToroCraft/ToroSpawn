@@ -10,8 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.torocraft.torospawnmod.ToroSpawnMod;
 import net.torocraft.torospawnmod.material.ArmorMaterials;
@@ -62,37 +64,46 @@ public class ItemSpawnScanner extends ItemArmor {
 			return;
 		}
 		
-		IBlockState blockState = world.getBlockState(player.getPosition());
-		if (blockMeetsSpawnConditions(blockState)) {
-			player.addChatMessage(new TextComponentString("enemy can spawn here"));
+		BlockPos playerPos = player.getPosition();
+		BlockPos blockPos = playerPos.add(0, -1, 0);
+		
+		IBlockState blockState = world.getBlockState(blockPos);
+		String reason = blockMeetsSpawnConditions(world, player, blockState, blockPos);
+		if (reason != null) {
+			player.addChatMessage(new TextComponentString("enemy cannot spawn here: " + reason));
 		} else {
-			player.addChatMessage(new TextComponentString("enemy canNOT spawn here"));
+			//player.addChatMessage(new TextComponentString("enemy canNOT spawn here"));
 		}
 	}
 
-	private boolean blockMeetsSpawnConditions(IBlockState blockState) {
+	private String blockMeetsSpawnConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos pos) {
 		Block block = blockState.getBlock();
-		int light = block.getLightValue(blockState);
+		int light = world.getLightFor(EnumSkyBlock.SKY, pos);
 		
+		System.out.println("light: " + light);
 		if (light > 7) {
-			return false;
+			return "light";
 		}
 		
-		if (!block.isFullyOpaque(blockState)) {
-			return false;
+		if (block.getLightOpacity(blockState) == 0) {
+			return "not opaque";
 		}
 		
 		if (block instanceof BlockSlab) {
-			if (!block.isFullBlock(blockState) && blockState.getValue(BlockSlab.HALF).equals(EnumBlockHalf.BOTTOM)) {
-				return false;
+			System.out.println("block is slab");
+			if (!block.isFullBlock(blockState) && blockState.getValue(BlockSlab.HALF) == EnumBlockHalf.BOTTOM) {
+				return "half slab";
 			}
 		}
 		
-		return true;
+		return null;
 	}
 
 	private boolean isWearingSpawnScanner(EntityPlayer player) {
 		for (ItemStack equippedItem: player.getEquipmentAndArmor()) {
+			if (equippedItem == null || equippedItem.getItem() == null) {
+				continue;
+			}
 			if (equippedItem.getItem() instanceof ItemSpawnScanner) {
 				return true;
 			}
