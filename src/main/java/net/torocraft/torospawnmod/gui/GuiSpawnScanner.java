@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -48,12 +48,12 @@ public class GuiSpawnScanner extends Gui {
 	    
 	    EntityPlayer player = (EntityPlayer)rve;
 	    
-	    NBTTagCompound tag = (NBTTagCompound)player.getEntityData().getTag("spawn");
+	    NBTTagList tag = (NBTTagList)player.getEntityData().getTag("spawn");
 	    
 	    int xPos = 2;
 	    int yPos = 2;
 	    
-	    if (tag != null && tag.getBoolean("canSpawn")) {
+	    if (tag != null && tag.tagCount() > 0) {
 	    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	        GL11.glDisable(GL11.GL_LIGHTING);      
 	        this.mc.renderEngine.bindTexture(new ResourceLocation("/gui/inventory.png"));

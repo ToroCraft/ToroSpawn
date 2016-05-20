@@ -1,5 +1,8 @@
 package net.torocraft.torospawnmod.armor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
@@ -10,7 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
@@ -58,60 +62,110 @@ public class ItemSpawnScanner extends ItemArmor {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {		
 		if (isWearingSpawnScanner(player)) {
-			checkIfMobCanSpawn(world, player);
+			List<String> mobsToSpawn = determineMobsAbleToSpawn(world, player);
+			storeSpawnableMobsOnPlayer(player, mobsToSpawn);
 		}
 	}
 
-	private void checkIfMobCanSpawn(World world, EntityPlayer player) {
-		if (world.getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
-			return;
+	private void storeSpawnableMobsOnPlayer(EntityPlayer player, List<String> mobsToSpawn) {
+		NBTTagList list = new NBTTagList();
+		for (String mob : mobsToSpawn) {
+			list.appendTag(new NBTTagString(mob));
 		}
-		
-		if (isJumping(player)) {
-			return;
+		player.getEntityData().setTag("spawn", list);
+	}
+
+	private List<String> determineMobsAbleToSpawn(World world, EntityPlayer player) {
+		List<String> mobsToSpawn = new ArrayList<String>();
+		if (world.getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
+			return mobsToSpawn;
 		}
 		
 		BlockPos playerPos = player.getPosition();
 		BlockPos blockPos = playerPos.down(1);
 		
 		BiomeGenBase biome = world.getBiomeGenForCoords(blockPos);
-		if (isBiomeOfType(biome, Type.NETHER) || isBiomeOfType(biome, Type.END)) {
-			return;
+		if (isBiomeOfType(biome, Type.NETHER)) {
+			return netherEntities();
+		}
+		
+		if (isBiomeOfType(biome, Type.END)) {
+			return endEntities();
 		}
 		
 		IBlockState blockState = world.getBlockState(blockPos);
-		NBTTagCompound canSpawn = new NBTTagCompound();
-		canSpawn.setBoolean("canSpawn", blockMeetsSpawnConditions(world, player, blockState, blockPos));
-		player.getEntityData().setTag("spawn", canSpawn);
+		if (isInAir(world, blockPos, blockState)) {
+			return mobsToSpawn;
+		}
+		
+		mobsToSpawn.addAll(checkStandardMobConditions(world, player, blockState, blockPos));		
+		
+		return mobsToSpawn;
 	}
 
-	private boolean blockMeetsSpawnConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos blockPos) {		
+	private List<String> endEntities() {
+		List<String> endMobs = new ArrayList<String>();
+		endMobs.add("enderman");
+		if (isInEndCity()) {
+			endMobs.add("shulker");
+		}
+		return endMobs;
+	}
+
+	private boolean isInEndCity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private List<String> netherEntities() {
+		List<String> netherMobs = new ArrayList<String>();
+		netherMobs.add("zombiePigman");
+		netherMobs.add("ghast");
+		if (isInFortress()) {
+			netherMobs.add("blaze");
+			netherMobs.add("skeleton");
+			netherMobs.add("magmaCube");
+		}
+		return netherMobs;
+	}
+
+	private boolean isInFortress() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private List<String> checkStandardMobConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos blockPos) {		
+		List<String> mobList = new ArrayList<String>();
 		Block block = blockState.getBlock();
 		BlockPos playerPos = player.getPosition();
 		int light = world.getChunkFromBlockCoords(playerPos).getLightFor(EnumSkyBlock.BLOCK, playerPos);
 		if (light > 7) {
-			return false;
+			return mobList;
 		}
 		
 		if (block.getLightOpacity(blockState) == 0) {
-			return false;
+			return mobList;
 		}
 		
 		if (block instanceof BlockSlab) {
 			if (!block.isFullBlock(blockState) && blockState.getValue(BlockSlab.HALF) == EnumBlockHalf.BOTTOM) {
-				return false;
+				return mobList;
 			}
 		}
 		
-		return true;
+		mobList.add("creeper");
+		mobList.add("skeleton");
+		mobList.add("zombie");
+		mobList.add("spider");
+		return mobList;
 	}
 
 	private boolean isBiomeOfType(BiomeGenBase biome, Type type) {
 		return BiomeDictionary.isBiomeOfType(biome, type);
 	}
 	
-	private boolean isJumping(EntityPlayer player) {
-		return false;
+	private boolean isInAir(World world, BlockPos pos, IBlockState state) {
+		return state.getBlock().isAir(state, world, pos);
 	}
 
 	private boolean isWearingSpawnScanner(EntityPlayer player) {
