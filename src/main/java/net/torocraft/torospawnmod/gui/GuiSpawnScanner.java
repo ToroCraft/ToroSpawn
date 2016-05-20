@@ -1,7 +1,13 @@
 package net.torocraft.torospawnmod.gui;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,6 +21,12 @@ public class GuiSpawnScanner extends Gui {
 		this.mc = mc;
 	}
 	
+	private static final int BUFF_ICON_SIZE = 18;
+	private static final int BUFF_ICON_SPACING = BUFF_ICON_SIZE + 2; // 2 pixels between buff icons
+	private static final int BUFF_ICON_BASE_U_OFFSET = 0;
+	private static final int BUFF_ICON_BASE_V_OFFSET = 198;
+	private static final int BUFF_ICONS_PER_ROW = 8;
+	
 	@SubscribeEvent
 	public void addSpawnScannerGui(RenderGameOverlayEvent event) {
 		/*
@@ -27,6 +39,31 @@ public class GuiSpawnScanner extends Gui {
 	    if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {      
 	    	return;
 	    }
+	    
+	    Entity rve = mc.getRenderViewEntity();
+	    
+	    if (!(rve instanceof EntityPlayer)) {
+	    	return;
+	    }
+	    
+	    EntityPlayer player = (EntityPlayer)rve;
+	    
+	    NBTTagCompound tag = (NBTTagCompound)player.getEntityData().getTag("spawn");
+	    
+	    int xPos = 2;
+	    int yPos = 2;
+	    
+	    if (tag != null && tag.getBoolean("canSpawn")) {
+	    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	        GL11.glDisable(GL11.GL_LIGHTING);      
+	        this.mc.renderEngine.bindTexture(new ResourceLocation("/gui/inventory.png"));
+	        
+	        this.drawTexturedModalRect(
+	                xPos, yPos, 
+	                BUFF_ICON_BASE_U_OFFSET % BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE, BUFF_ICON_BASE_V_OFFSET / BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE,
+	                BUFF_ICON_SIZE, BUFF_ICON_SIZE);
+	    }
+	    
 	}
 	
 }

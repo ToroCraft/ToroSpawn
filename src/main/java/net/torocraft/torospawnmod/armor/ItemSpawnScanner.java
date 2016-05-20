@@ -10,8 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -64,22 +64,20 @@ public class ItemSpawnScanner extends ItemArmor {
 			return;
 		}
 		
+		if (isJumping(player)) {
+			return;
+		}
+		
 		BlockPos playerPos = player.getPosition();
 		BlockPos blockPos = playerPos.down(1);
 		
 		IBlockState blockState = world.getBlockState(blockPos);
-		if (blockMeetsSpawnConditions(world, player, blockState, blockPos)) {
-			player.addChatMessage(new TextComponentString("enemy can spawn here"));
-		} else {
-			//player.addChatMessage(new TextComponentString("enemy canNOT spawn here"));
-		}
+		NBTTagCompound canSpawn = new NBTTagCompound();
+		canSpawn.setBoolean("canSpawn", blockMeetsSpawnConditions(world, player, blockState, blockPos));
+		player.getEntityData().setTag("spawn", canSpawn);
 	}
 
 	private boolean blockMeetsSpawnConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos blockPos) {
-		
-		if (isJumping(player)) {
-			return false;
-		}
 		
 		Block block = blockState.getBlock();
 		BlockPos playerPos = player.getPosition();
