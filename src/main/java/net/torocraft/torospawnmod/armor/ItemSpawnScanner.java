@@ -12,9 +12,13 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.torocraft.torospawnmod.ToroSpawnMod;
 import net.torocraft.torospawnmod.material.ArmorMaterials;
 import net.torocraft.torospawnmod.util.ToroSpawnUtils;
@@ -71,14 +75,18 @@ public class ItemSpawnScanner extends ItemArmor {
 		BlockPos playerPos = player.getPosition();
 		BlockPos blockPos = playerPos.down(1);
 		
+		BiomeGenBase biome = world.getBiomeGenForCoords(blockPos);
+		if (isBiomeOfType(biome, Type.NETHER) || isBiomeOfType(biome, Type.END)) {
+			return;
+		}
+		
 		IBlockState blockState = world.getBlockState(blockPos);
 		NBTTagCompound canSpawn = new NBTTagCompound();
 		canSpawn.setBoolean("canSpawn", blockMeetsSpawnConditions(world, player, blockState, blockPos));
 		player.getEntityData().setTag("spawn", canSpawn);
 	}
 
-	private boolean blockMeetsSpawnConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos blockPos) {
-		
+	private boolean blockMeetsSpawnConditions(World world, EntityPlayer player, IBlockState blockState, BlockPos blockPos) {		
 		Block block = blockState.getBlock();
 		BlockPos playerPos = player.getPosition();
 		int light = world.getChunkFromBlockCoords(playerPos).getLightFor(EnumSkyBlock.BLOCK, playerPos);
@@ -100,6 +108,10 @@ public class ItemSpawnScanner extends ItemArmor {
 		return true;
 	}
 
+	private boolean isBiomeOfType(BiomeGenBase biome, Type type) {
+		return BiomeDictionary.isBiomeOfType(biome, type);
+	}
+	
 	private boolean isJumping(EntityPlayer player) {
 		return false;
 	}
