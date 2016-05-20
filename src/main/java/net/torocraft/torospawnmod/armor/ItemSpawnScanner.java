@@ -12,7 +12,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -99,7 +98,6 @@ public class ItemSpawnScanner extends ItemArmor {
 		}
 		
 		if (block instanceof BlockSlab) {
-			System.out.println("block is slab");
 			if (!block.isFullBlock(blockState) && blockState.getValue(BlockSlab.HALF) == EnumBlockHalf.BOTTOM) {
 				return false;
 			}
