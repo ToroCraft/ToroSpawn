@@ -21,11 +21,8 @@ public class GuiSpawnScanner extends Gui {
 		this.mc = mc;
 	}
 	
-	private static final int BUFF_ICON_SIZE = 18;
+	private static final int BUFF_ICON_SIZE = 25;
 	private static final int BUFF_ICON_SPACING = BUFF_ICON_SIZE + 2; // 2 pixels between buff icons
-	private static final int BUFF_ICON_BASE_U_OFFSET = 0;
-	private static final int BUFF_ICON_BASE_V_OFFSET = 198;
-	private static final int BUFF_ICONS_PER_ROW = 8;
 	
 	@SubscribeEvent
 	public void addSpawnScannerGui(RenderGameOverlayEvent event) {
@@ -55,13 +52,21 @@ public class GuiSpawnScanner extends Gui {
 	    
 	    if (tag != null && tag.tagCount() > 0) {
 	    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	        GL11.glDisable(GL11.GL_LIGHTING);      
-	        this.mc.renderEngine.bindTexture(new ResourceLocation("/gui/inventory.png"));
+	        GL11.glDisable(GL11.GL_LIGHTING);
 	        
-	        this.drawTexturedModalRect(
-	                xPos, yPos, 
-	                BUFF_ICON_BASE_U_OFFSET % BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE, BUFF_ICON_BASE_V_OFFSET / BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE,
-	                BUFF_ICON_SIZE, BUFF_ICON_SIZE);
+	        String mobName;
+	        for (int i = 0; i < tag.tagCount(); i++) {
+	        	mobName = tag.getStringTagAt(i);
+	        	
+	        	this.mc.renderEngine.bindTexture(new ResourceLocation("torospawnmod", "/textures/items/" + mobName + ".png"));
+		        
+		        this.drawTexturedModalRect(
+		                xPos, yPos, 
+		                0, 0,
+		                BUFF_ICON_SIZE, BUFF_ICON_SIZE);
+		        
+		        xPos += BUFF_ICON_SPACING;
+	        }
 	    }
 	    
 	}

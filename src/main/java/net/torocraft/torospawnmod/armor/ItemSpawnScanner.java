@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -147,10 +148,24 @@ public class ItemSpawnScanner extends ItemArmor {
 			return mobList;
 		}
 		
+		if (block.isLeaves(blockState, world, blockPos)) {
+			return mobList;
+		}
+		
 		if (block instanceof BlockSlab) {
 			if (!block.isFullBlock(blockState) && blockState.getValue(BlockSlab.HALF) == EnumBlockHalf.BOTTOM) {
 				return mobList;
 			}
+		}
+		
+		IBlockState playerBlockState = world.getBlockState(playerPos);
+		
+		if (block.isLadder(playerBlockState, world, playerPos, null)) {
+			return mobList;
+		}
+		
+		if (block.getMaterial(playerBlockState) == Material.water) {
+			return mobList;
 		}
 		
 		mobList.add("creeper");
