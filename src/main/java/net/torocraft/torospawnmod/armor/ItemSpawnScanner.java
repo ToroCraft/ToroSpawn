@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -108,15 +107,7 @@ public class ItemSpawnScanner extends ItemArmor {
 	private List<String> endEntities() {
 		List<String> endMobs = new ArrayList<String>();
 		endMobs.add("enderman");
-		if (isInEndCity()) {
-			endMobs.add("shulker");
-		}
 		return endMobs;
-	}
-
-	private boolean isInEndCity() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	private List<String> netherEntities() {

@@ -4,9 +4,6 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagList;
@@ -24,7 +21,7 @@ public class GuiSpawnScanner extends Gui {
 		this.mc = mc;
 	}
 	
-	private static final int BUFF_ICON_SIZE = 25;
+	private static final int BUFF_ICON_SIZE = 18;
 	private static final int BUFF_ICON_SPACING = BUFF_ICON_SIZE + 2; // 2 pixels between buff icons
 	
 	@SubscribeEvent
