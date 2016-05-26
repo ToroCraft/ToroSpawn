@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -164,7 +165,8 @@ public class ItemSpawnScanner extends ItemArmor {
 			return mobList;
 		}
 		
-		if (block.getMaterial(playerBlockState) == Material.water) {
+		Block playerBlock = playerBlockState.getBlock();
+		if (playerBlock.equals(Blocks.water) || playerBlock.equals(Blocks.flowing_water) || playerBlock.equals(Blocks.lava) || playerBlock.equals(Blocks.flowing_lava)) {
 			return mobList;
 		}
 		

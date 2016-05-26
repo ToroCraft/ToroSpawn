@@ -4,6 +4,9 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagList;
@@ -58,12 +61,17 @@ public class GuiSpawnScanner extends Gui {
 	        for (int i = 0; i < tag.tagCount(); i++) {
 	        	mobName = tag.getStringTagAt(i);
 	        	
-	        	this.mc.renderEngine.bindTexture(new ResourceLocation("torospawnmod", "/textures/items/" + mobName + ".png"));
+	        	ResourceLocation spriteLoc = new ResourceLocation("torospawnmod", "/textures/items/" + mobName + ".png");
+	        	this.mc.renderEngine.bindTexture(spriteLoc);
 		        
+	        	Gui.drawModalRectWithCustomSizedTexture(xPos, yPos, 0, 0, BUFF_ICON_SIZE, BUFF_ICON_SIZE, BUFF_ICON_SIZE, BUFF_ICON_SIZE);
+	        	
+	        	/*
 		        this.drawTexturedModalRect(
 		                xPos, yPos, 
 		                0, 0,
 		                BUFF_ICON_SIZE, BUFF_ICON_SIZE);
+		                */
 		        
 		        xPos += BUFF_ICON_SPACING;
 	        }
