@@ -114,10 +114,10 @@ public class ItemSpawnScanner extends ItemArmor {
 		List<String> netherMobs = new ArrayList<String>();
 		netherMobs.add("zombiePigman");
 		netherMobs.add("ghast");
+		netherMobs.add("magmaCube");
 		if (isInFortress()) {
 			netherMobs.add("blaze");
 			netherMobs.add("skeleton");
-			netherMobs.add("magmaCube");
 		}
 		return netherMobs;
 	}
