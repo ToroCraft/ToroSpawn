@@ -8,7 +8,6 @@ public class ArmorMaterials {
 	
 	private static final String MODID = ToroSpawnMod.MODID;
 	
-	public static ArmorMaterial SCANNER = EnumHelper.addArmorMaterial("SCANNER", MODID + ":scanner", 36, new int[]{0, 0, 0, 0}, 10, null);
+	public static ArmorMaterial SCANNER = EnumHelper.addArmorMaterial("SCANNER", MODID + ":scanner", 36, new int[]{0, 0, 0, 0}, 10, null, 0.0f);
 	
 }
-

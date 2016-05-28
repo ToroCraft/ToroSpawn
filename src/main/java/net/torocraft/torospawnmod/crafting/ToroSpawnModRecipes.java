@@ -12,8 +12,8 @@ public class ToroSpawnModRecipes {
 	}
 	
 	private static void spawnScanner() {
-		ItemStack iron = new ItemStack(Items.iron_ingot);
-		ItemStack emerald = new ItemStack(Items.emerald);
+		ItemStack iron = new ItemStack(Items.IRON_INGOT);
+		ItemStack emerald = new ItemStack(Items.EMERALD);
 		
 		GameRegistry.addRecipe(new ItemStack(ItemSpawnScanner.helmetItem), "iii", "iei", 'i', iron, 'e', emerald);
 	}	

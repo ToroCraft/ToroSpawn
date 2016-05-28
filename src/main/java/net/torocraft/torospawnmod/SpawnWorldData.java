@@ -23,10 +23,11 @@ public class SpawnWorldData extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		NBTTagCompound c = new NBTTagCompound();
 		c.setBoolean("canSpawn", canSpawn);
 		nbt.setTag("spawn", c);
+		return c;
 	}
 
 }

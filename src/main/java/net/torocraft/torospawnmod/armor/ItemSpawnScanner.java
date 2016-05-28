@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.torocraft.torospawnmod.ToroSpawnMod;
@@ -85,7 +85,7 @@ public class ItemSpawnScanner extends ItemArmor {
 		BlockPos playerPos = player.getPosition();
 		BlockPos blockPos = playerPos.down(1);
 		
-		BiomeGenBase biome = world.getBiomeGenForCoords(blockPos);
+		Biome biome = world.getBiomeGenForCoords(blockPos);
 		if (isBiomeOfType(biome, Type.NETHER)) {
 			return netherEntities();
 		}
@@ -157,7 +157,7 @@ public class ItemSpawnScanner extends ItemArmor {
 		}
 		
 		Block playerBlock = playerBlockState.getBlock();
-		if (playerBlock.equals(Blocks.water) || playerBlock.equals(Blocks.flowing_water) || playerBlock.equals(Blocks.lava) || playerBlock.equals(Blocks.flowing_lava)) {
+		if (playerBlock.equals(Blocks.WATER) || playerBlock.equals(Blocks.FLOWING_WATER) || playerBlock.equals(Blocks.LAVA) || playerBlock.equals(Blocks.FLOWING_LAVA)) {
 			return mobList;
 		}
 		
@@ -168,7 +168,7 @@ public class ItemSpawnScanner extends ItemArmor {
 		return mobList;
 	}
 
-	private boolean isBiomeOfType(BiomeGenBase biome, Type type) {
+	private boolean isBiomeOfType(Biome biome, Type type) {
 		return BiomeDictionary.isBiomeOfType(biome, type);
 	}
 	
