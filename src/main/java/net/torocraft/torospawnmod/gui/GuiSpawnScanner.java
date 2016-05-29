@@ -58,7 +58,7 @@ public class GuiSpawnScanner extends Gui {
 	        for (int i = 0; i < tag.tagCount(); i++) {
 	        	mobName = tag.getStringTagAt(i);
 	        	
-	        	ResourceLocation spriteLoc = new ResourceLocation("torospawnmod", "/textures/items/" + mobName + ".png");
+	        	ResourceLocation spriteLoc = new ResourceLocation("torospawnmod", "textures/items/" + mobName + ".png");
 	        	this.mc.renderEngine.bindTexture(spriteLoc);
 		        
 	        	Gui.drawModalRectWithCustomSizedTexture(xPos, yPos, 0, 0, BUFF_ICON_SIZE, BUFF_ICON_SIZE, BUFF_ICON_SIZE, BUFF_ICON_SIZE);
