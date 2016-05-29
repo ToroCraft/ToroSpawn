@@ -37,7 +37,6 @@ public class ToroSpawnMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 	    proxy.postInit(e);
-		MinecraftForge.EVENT_BUS.register(new GuiSpawnScanner(Minecraft.getMinecraft()));
 	}
 	
 }
