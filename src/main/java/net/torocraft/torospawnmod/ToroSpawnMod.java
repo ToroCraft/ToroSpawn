@@ -1,7 +1,5 @@
 package net.torocraft.torospawnmod;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -9,13 +7,12 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.torocraft.torospawnmod.gui.GuiSpawnScanner;
 
 @Mod (modid = ToroSpawnMod.MODID, name = ToroSpawnMod.MODNAME, version = ToroSpawnMod.VERSION)
 public class ToroSpawnMod {
 	
 	public static final String MODID = "torospawnmod";
-	public static final String VERSION = "1.0";
+	public static final String VERSION = "1.9.4-1";
 	public static final String MODNAME = "ToroSpawnMod";
 	
 	@SidedProxy(clientSide="net.torocraft.torospawnmod.ClientProxy", serverSide="net.torocraft.torospawnmod.ServerProxy")
